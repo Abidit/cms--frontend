@@ -1,24 +1,25 @@
-import { IconHome, IconArticle, IconSettings } from '@tabler/icons-react'
+import { IconArticle, IconHome, IconSettings } from '@tabler/icons-react'
 import {
+  Activity,
+  BrainCircuit,
+  Briefcase,
   Calendar,
+  Database,
+  FileText,
   Home,
+  Library,
   Mail,
+  MessageCircle,
+  MessageSquareQuote,
   Newspaper,
   PartyPopper,
-  User,
-  Users,
-  MessageCircle,
-  Briefcase,
-  Library,
-  Database,
-  Trophy,
   Tag,
-  Activity,
-  FileText,
-  MessageSquareQuote,
+  Trophy,
+  User,
   UserCheck,
+  Users,
 } from 'lucide-react'
-import { NavGroup } from '../types'
+import type { NavGroup } from '../types'
 
 export enum Roles {
   SUPER_ADMIN = 'SUPER_ADMIN',
@@ -53,6 +54,12 @@ export const sidebarMenus: NavGroup[] = [
           Roles.INDIVIDUAL,
           Roles.ORGANIZATION,
         ],
+      },
+      {
+        title: 'AI Documents',
+        url: '/ai-documents',
+        icon: BrainCircuit,
+        roles: [Roles.SUPER_ADMIN, Roles.ADMIN],
       },
       {
         title: 'Events',

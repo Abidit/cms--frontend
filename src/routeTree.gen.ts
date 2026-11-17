@@ -32,6 +32,7 @@ import { Route as AuthenticatedMinutesIndexImport } from './routes/_authenticate
 import { Route as AuthenticatedMembersIndexImport } from './routes/_authenticated/members/index'
 import { Route as AuthenticatedClimateChampionsIndexImport } from './routes/_authenticated/climate-champions/index'
 import { Route as AuthenticatedAskAiIndexImport } from './routes/_authenticated/ask-ai/index'
+import { Route as AuthenticatedAiDocumentsIndexImport } from './routes/_authenticated/ai-documents/index'
 import { Route as AuthenticatedActivitiesIndexImport } from './routes/_authenticated/activities/index'
 import { Route as AuthenticatedVacanciesAddImport } from './routes/_authenticated/vacancies/add'
 import { Route as AuthenticatedVacanciesIdImport } from './routes/_authenticated/vacancies/$id'
@@ -74,6 +75,7 @@ const errors404LazyImport = createFileRoute('/(errors)/404')()
 const errors403LazyImport = createFileRoute('/(errors)/403')()
 const errors401LazyImport = createFileRoute('/(errors)/401')()
 const authSignUpLazyImport = createFileRoute('/(auth)/sign-up')()
+const authResetPasswordLazyImport = createFileRoute('/(auth)/reset-password')()
 const authForgotPasswordLazyImport = createFileRoute(
   '/(auth)/forgot-password',
 )()
@@ -167,6 +169,16 @@ const authSignUpLazyRoute = authSignUpLazyImport
     getParentRoute: () => rootRoute,
   } as any)
   .lazy(() => import('./routes/(auth)/sign-up.lazy').then((d) => d.Route))
+
+const authResetPasswordLazyRoute = authResetPasswordLazyImport
+  .update({
+    id: '/(auth)/reset-password',
+    path: '/reset-password',
+    getParentRoute: () => rootRoute,
+  } as any)
+  .lazy(() =>
+    import('./routes/(auth)/reset-password.lazy').then((d) => d.Route),
+  )
 
 const authForgotPasswordLazyRoute = authForgotPasswordLazyImport
   .update({
@@ -320,6 +332,13 @@ const AuthenticatedAskAiIndexRoute = AuthenticatedAskAiIndexImport.update({
   path: '/ask-ai/',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+
+const AuthenticatedAiDocumentsIndexRoute =
+  AuthenticatedAiDocumentsIndexImport.update({
+    id: '/ai-documents/',
+    path: '/ai-documents/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 const AuthenticatedActivitiesIndexRoute =
   AuthenticatedActivitiesIndexImport.update({
@@ -646,6 +665,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authForgotPasswordLazyImport
       parentRoute: typeof rootRoute
     }
+    '/(auth)/reset-password': {
+      id: '/(auth)/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof authResetPasswordLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/(auth)/sign-up': {
       id: '/(auth)/sign-up'
       path: '/sign-up'
@@ -840,6 +866,13 @@ declare module '@tanstack/react-router' {
       path: '/activities'
       fullPath: '/activities'
       preLoaderRoute: typeof AuthenticatedActivitiesIndexImport
+      parentRoute: typeof AuthenticatedRouteImport
+    }
+    '/_authenticated/ai-documents/': {
+      id: '/_authenticated/ai-documents/'
+      path: '/ai-documents'
+      fullPath: '/ai-documents'
+      preLoaderRoute: typeof AuthenticatedAiDocumentsIndexImport
       parentRoute: typeof AuthenticatedRouteImport
     }
     '/_authenticated/ask-ai/': {
@@ -1111,6 +1144,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedVacanciesIdRoute: typeof AuthenticatedVacanciesIdRoute
   AuthenticatedVacanciesAddRoute: typeof AuthenticatedVacanciesAddRoute
   AuthenticatedActivitiesIndexRoute: typeof AuthenticatedActivitiesIndexRoute
+  AuthenticatedAiDocumentsIndexRoute: typeof AuthenticatedAiDocumentsIndexRoute
   AuthenticatedAskAiIndexRoute: typeof AuthenticatedAskAiIndexRoute
   AuthenticatedClimateChampionsIndexRoute: typeof AuthenticatedClimateChampionsIndexRoute
   AuthenticatedMembersIndexRoute: typeof AuthenticatedMembersIndexRoute
@@ -1164,6 +1198,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedVacanciesIdRoute: AuthenticatedVacanciesIdRoute,
   AuthenticatedVacanciesAddRoute: AuthenticatedVacanciesAddRoute,
   AuthenticatedActivitiesIndexRoute: AuthenticatedActivitiesIndexRoute,
+  AuthenticatedAiDocumentsIndexRoute: AuthenticatedAiDocumentsIndexRoute,
   AuthenticatedAskAiIndexRoute: AuthenticatedAskAiIndexRoute,
   AuthenticatedClimateChampionsIndexRoute:
     AuthenticatedClimateChampionsIndexRoute,
@@ -1226,6 +1261,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof AuthenticatedProfileRoute
   '/settings': typeof AuthenticatedSettingsRouteLazyRouteWithChildren
   '/forgot-password': typeof authForgotPasswordLazyRoute
+  '/reset-password': typeof authResetPasswordLazyRoute
   '/sign-up': typeof authSignUpLazyRoute
   '/401': typeof errors401LazyRoute
   '/403': typeof errors403LazyRoute
@@ -1253,6 +1289,7 @@ export interface FileRoutesByFullPath {
   '/settings/display': typeof AuthenticatedSettingsDisplayLazyRoute
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsLazyRoute
   '/activities': typeof AuthenticatedActivitiesIndexRoute
+  '/ai-documents': typeof AuthenticatedAiDocumentsIndexRoute
   '/ask-ai': typeof AuthenticatedAskAiIndexRoute
   '/climate-champions': typeof AuthenticatedClimateChampionsIndexRoute
   '/members': typeof AuthenticatedMembersIndexRoute
@@ -1293,6 +1330,7 @@ export interface FileRoutesByTo {
   '/verify-email': typeof authVerifyEmailRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/forgot-password': typeof authForgotPasswordLazyRoute
+  '/reset-password': typeof authResetPasswordLazyRoute
   '/sign-up': typeof authSignUpLazyRoute
   '/401': typeof errors401LazyRoute
   '/403': typeof errors403LazyRoute
@@ -1320,6 +1358,7 @@ export interface FileRoutesByTo {
   '/settings/display': typeof AuthenticatedSettingsDisplayLazyRoute
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsLazyRoute
   '/activities': typeof AuthenticatedActivitiesIndexRoute
+  '/ai-documents': typeof AuthenticatedAiDocumentsIndexRoute
   '/ask-ai': typeof AuthenticatedAskAiIndexRoute
   '/climate-champions': typeof AuthenticatedClimateChampionsIndexRoute
   '/members': typeof AuthenticatedMembersIndexRoute
@@ -1363,6 +1402,7 @@ export interface FileRoutesById {
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRouteLazyRouteWithChildren
   '/(auth)/forgot-password': typeof authForgotPasswordLazyRoute
+  '/(auth)/reset-password': typeof authResetPasswordLazyRoute
   '/(auth)/sign-up': typeof authSignUpLazyRoute
   '/(errors)/401': typeof errors401LazyRoute
   '/(errors)/403': typeof errors403LazyRoute
@@ -1391,6 +1431,7 @@ export interface FileRoutesById {
   '/_authenticated/settings/display': typeof AuthenticatedSettingsDisplayLazyRoute
   '/_authenticated/settings/notifications': typeof AuthenticatedSettingsNotificationsLazyRoute
   '/_authenticated/activities/': typeof AuthenticatedActivitiesIndexRoute
+  '/_authenticated/ai-documents/': typeof AuthenticatedAiDocumentsIndexRoute
   '/_authenticated/ask-ai/': typeof AuthenticatedAskAiIndexRoute
   '/_authenticated/climate-champions/': typeof AuthenticatedClimateChampionsIndexRoute
   '/_authenticated/members/': typeof AuthenticatedMembersIndexRoute
@@ -1434,6 +1475,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/settings'
     | '/forgot-password'
+    | '/reset-password'
     | '/sign-up'
     | '/401'
     | '/403'
@@ -1461,6 +1503,7 @@ export interface FileRouteTypes {
     | '/settings/display'
     | '/settings/notifications'
     | '/activities'
+    | '/ai-documents'
     | '/ask-ai'
     | '/climate-champions'
     | '/members'
@@ -1500,6 +1543,7 @@ export interface FileRouteTypes {
     | '/verify-email'
     | '/profile'
     | '/forgot-password'
+    | '/reset-password'
     | '/sign-up'
     | '/401'
     | '/403'
@@ -1527,6 +1571,7 @@ export interface FileRouteTypes {
     | '/settings/display'
     | '/settings/notifications'
     | '/activities'
+    | '/ai-documents'
     | '/ask-ai'
     | '/climate-champions'
     | '/members'
@@ -1568,6 +1613,7 @@ export interface FileRouteTypes {
     | '/_authenticated/profile'
     | '/_authenticated/settings'
     | '/(auth)/forgot-password'
+    | '/(auth)/reset-password'
     | '/(auth)/sign-up'
     | '/(errors)/401'
     | '/(errors)/403'
@@ -1596,6 +1642,7 @@ export interface FileRouteTypes {
     | '/_authenticated/settings/display'
     | '/_authenticated/settings/notifications'
     | '/_authenticated/activities/'
+    | '/_authenticated/ai-documents/'
     | '/_authenticated/ask-ai/'
     | '/_authenticated/climate-champions/'
     | '/_authenticated/members/'
@@ -1637,6 +1684,7 @@ export interface RootRouteChildren {
   authSignInRoute: typeof authSignInRoute
   authVerifyEmailRoute: typeof authVerifyEmailRoute
   authForgotPasswordLazyRoute: typeof authForgotPasswordLazyRoute
+  authResetPasswordLazyRoute: typeof authResetPasswordLazyRoute
   authSignUpLazyRoute: typeof authSignUpLazyRoute
   errors401LazyRoute: typeof errors401LazyRoute
   errors403LazyRoute: typeof errors403LazyRoute
@@ -1652,6 +1700,7 @@ const rootRouteChildren: RootRouteChildren = {
   authSignInRoute: authSignInRoute,
   authVerifyEmailRoute: authVerifyEmailRoute,
   authForgotPasswordLazyRoute: authForgotPasswordLazyRoute,
+  authResetPasswordLazyRoute: authResetPasswordLazyRoute,
   authSignUpLazyRoute: authSignUpLazyRoute,
   errors401LazyRoute: errors401LazyRoute,
   errors403LazyRoute: errors403LazyRoute,
@@ -1676,6 +1725,7 @@ export const routeTree = rootRoute
         "/(auth)/sign-in",
         "/(auth)/verify-email",
         "/(auth)/forgot-password",
+        "/(auth)/reset-password",
         "/(auth)/sign-up",
         "/(errors)/401",
         "/(errors)/403",
@@ -1707,6 +1757,7 @@ export const routeTree = rootRoute
         "/_authenticated/vacancies/$id",
         "/_authenticated/vacancies/add",
         "/_authenticated/activities/",
+        "/_authenticated/ai-documents/",
         "/_authenticated/ask-ai/",
         "/_authenticated/climate-champions/",
         "/_authenticated/members/",
@@ -1770,6 +1821,9 @@ export const routeTree = rootRoute
     },
     "/(auth)/forgot-password": {
       "filePath": "(auth)/forgot-password.lazy.tsx"
+    },
+    "/(auth)/reset-password": {
+      "filePath": "(auth)/reset-password.lazy.tsx"
     },
     "/(auth)/sign-up": {
       "filePath": "(auth)/sign-up.lazy.tsx"
@@ -1875,6 +1929,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated/activities/": {
       "filePath": "_authenticated/activities/index.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/ai-documents/": {
+      "filePath": "_authenticated/ai-documents/index.tsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/ask-ai/": {
